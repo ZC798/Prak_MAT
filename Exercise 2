@@ -1,0 +1,69 @@
+# Prak_MAT
+
+%% 2 Memory Management
+clear all;
+clc;
+% 1
+% Create 3 functions that increment a variable.
+% 1.1 LocalVar.
+% 1.2 PersistentVar.
+% 1.3 GlobalVar.
+
+% test loop
+global GlobalCounter;
+GlobalCounter = 0;
+clear PersistentVar;
+precounter = 0;
+for i = 1:10
+    GlobalVar;
+    OutputPersistent = PersistentVar;
+    precounter = LocalVar(precounter);
+end
+
+fprintf('Global Counter:\t\t%i\nPersistent Counter:\t%i\nLocal Counter:\t\t%i\n',...
+    GlobalCounter, OutputPersistent, precounter); 
+
+% 2 memory allocation
+% 2.1 without pre-allo
+tic
+for i = 1:1000
+    a(i,:)=i^2;
+end
+toc
+
+% 2.2 with pre-allo
+tic 
+b = zeros(1000,1);
+for i = 1:1000
+     a(i,:)=i^2;
+end
+toc
+
+% with pre-allo is faster.
+
+%  Task 3
+%  ------------------------------------------------------------------------
+%  lazy copy
+
+% read memory used in Matlab
+[usr, ~] = memory;
+fprintf('Memory used:\t%f\n',usr.MemUsedMATLAB);
+% Memory used:	2397605888.000000
+
+A = magic(2000);
+
+[usr, ~] = memory;
+fprintf('Memory used:\t%f\n',usr.MemUsedMATLAB);
+% Memory used:	2429607936.000000
+
+B = A;
+
+[usr, ~] = memory;
+fprintf('Memory used:\t%f\n',usr.MemUsedMATLAB);
+% Memory used:	2429607936.000000
+
+B(1) = 0;
+
+[usr, ~] = memory;
+fprintf('Memory used:\t%f\n',usr.MemUsedMATLAB);
+% Memory used:	2461609984.000000
